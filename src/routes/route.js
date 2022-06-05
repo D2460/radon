@@ -1,39 +1,37 @@
 const express = require('express');
-// const externalModule = require('./logger')
-const externalModule1 = require("../logger/logger")
-const externalModule2 = require("../util/helper")
-const externalModule3 = require("../validator/formatter")
-const underscore = require("underscore")
+const userController = require("../controllers/userControllers")
 const router = express.Router();
 
-router.get('/test-me', function (req, res) {
-    externalModule1.val()
-    externalModule2.Date1()
-    externalModule2.Month2()
-    externalModule2.BatchInfo()
-    externalModule3.trim1()
-    externalModule3.lowerCase()
-    externalModule3.upperCase()
-    let firstElement = underscore.first(["Dipen","Ajoy","Anita"])
-    console.log("Arrays first element is: " + firstElement)
-    res.send('My first ever api!')
-});
+router.get('/hello', userController.a);
 
-// router.get('/test-me1', function (req, res) {
-//     res.send('My second ever api!')
-// });
+router.get('/hello2', userController.b)
 
-// router.get('/test-me2', function (req, res) {
-//     res.send('My third api!')
-// });
+router.get('/hello3', userController.c)
 
-// router.get('/test-me3', function (req, res) {
-//     res.send('My 4th api!')
-// });
+router.get('/hello4', userController.d)
 
-// router.get('/test-me4', function (req, res) {
-//     res.send('My last api!')
-// });
+router.get('/test-me', userController.test1);
+
+router.get('/candidate', userController.Query1);
+
+router.get('/candidate/:name', userController.body1);
+
+router.get('/sol1', userController.Missing2);
+
+router.get('/missingNum', userController.MissingNumSol2);
+
+router.get('/missing', userController.missingNumber);
+
+router.get('/sol2', userController.MissingNum);
+
+router.get('/getUsersData', userController.getUsersData);
+
+router.post('/createUser', userController.createUser);
+
+router.post('/Dipen', userController.test2);
+
+router.post('/players', userController.AddName);
+  
+router.post('/test-post-4', userController.print1);
 
 module.exports = router;
-// adding this comment for no reason
