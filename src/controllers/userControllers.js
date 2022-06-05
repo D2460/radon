@@ -168,14 +168,9 @@ const print1 = function (req, res) {
 
 const a = function (req, res) {
     const months = ["January","February","March","April","May","June","July","August","September","Octobor","Novembor","December"]
-    function chunk_fun (months, chankSize) {
-        for(let i = 0; i < months.length; i += chankSize){
-            const chank = months.slice(i, i + chankSize)
-            console.log(chank)
-        }
-    }
-    const p = chunk_fun(months,3)
-    res.send("This is Chank Function")
+    const p = fun.chunk(months, 3)
+    console.log(p)
+    res.send({data: p})
 }
 
 const b = function (req, res) {
