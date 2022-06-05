@@ -166,6 +166,8 @@ const print1 = function (req, res) {
     res.send({msg:arr2, status:true})
 }
 
+// Module - 1
+
 const a = function (req, res) {
     const months = ["January","February","March","April","May","June","July","August","September","Octobor","Novembor","December"]
     const p = fun.chunk(months, 3)
@@ -173,12 +175,16 @@ const a = function (req, res) {
     res.send({data: p})
 }
 
+// Module - 2
+
 const b = function (req, res) {
     let oddNum = [1,3,5,7,9,11,13,15,17,19]
     let newOddNum = fun.tail(oddNum)
     console.log(newOddNum)
     res.send("This is tail Function.")
 }
+
+// Module - 3
 
 const c = function (req, res) {
     console.log(fun.union([10,20,25,29],
@@ -188,6 +194,8 @@ const c = function (req, res) {
         [29,27,1,44]))
     res.send("This is union function.")
 }
+
+// Module - 4
 
 const d = function (req, res) {
     let pairs = [["horror","The Shining"],["drama","Titanic"],["thriller","Shutter Island"],["fantasy","Pans Labyrinth"]]
@@ -206,9 +214,9 @@ module.exports.test1 = test1
 module.exports.test2 = test2
 module.exports.AddName = AddName
 module.exports.print1 = print1
+module.exports.MissingNumSol2 = MissingNumSol2
+module.exports.missingNumber = missingNumber
 module.exports.a = a
 module.exports.b = b
 module.exports.c = c
 module.exports.d = d
-module.exports.MissingNumSol2 = MissingNumSol2
-module.exports.missingNumber = missingNumber
