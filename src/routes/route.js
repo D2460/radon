@@ -12,4 +12,8 @@ router.get("/getBooksChatanBhagat", Controller.getBooksChatanBhagat)
 
 router.get("/findAuthor", Controller.findAuthor)
 
+router.get("/books-by-authorid/:Id", Controller.Show_book)
+
+router.get("/authorNameAndAge", Controller.authorNameAndAge)
+
 module.exports = router;

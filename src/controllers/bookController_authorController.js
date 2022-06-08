@@ -36,8 +36,33 @@ const findAuthor = async function (req, res) {
     res.send({msg:findAuthorName})
 }
 
+const Show_book = async function (req, res) {
+    let data = req.params.Id
+    if(data ==="1" || data ==="2" || data ==="3"){
+        let allBooks = await BookModel.find({author_id:data}).select({name:1,_id:0})
+        console.log(allBooks)
+        res.send({msg:allBooks})
+    }
+    else{
+        res.send("No data Exists with this id.")
+    }
+}
+
+const authorNameAndAge = async function (req, res) {
+    let authorAge = await AuthorModel.find({age:{$gt:50}}).select({author_id:1, author_name:1,age:1,_id:0})
+    let findRating = await BookModel.find({author_id:{$in:[authorAge[0].author_id,authorAge[1].author_id]}, ratings:{$gt:4} }).select({name:1,author_id:1,ratings:1,_id:0})
+    let a = authorAge[0].author_name
+    let b = authorAge[0].age
+    let c = authorAge[1].author_name
+    let d = authorAge[1].age
+    console.log(authorAge)
+    console.log(findRating)
+    res.send({msg:{"AuthorName1":a,"ageOfAuthor1":b,"AuthorName2":c,"ageOfAuthor2":d}}) 
+}
 module.exports.createNewBook = createNewBook
 module.exports.createAuthor = createAuthor
 module.exports.getBooksChatanBhagat = getBooksChatanBhagat
 module.exports.getBooks_update = getBooks_update
 module.exports.findAuthor = findAuthor
+module.exports.Show_book = Show_book
+module.exports.authorNameAndAge = authorNameAndAge
