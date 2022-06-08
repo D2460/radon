@@ -50,14 +50,17 @@ const Show_book = async function (req, res) {
 
 const authorNameAndAge = async function (req, res) {
     let authorAge = await AuthorModel.find({age:{$gt:50}}).select({author_id:1, author_name:1,age:1,_id:0})
-    let findRating = await BookModel.find({author_id:{$in:[authorAge[0].author_id,authorAge[1].author_id]}, ratings:{$gt:4} }).select({name:1,author_id:1,ratings:1,_id:0})
-    let a = authorAge[0].author_name
-    let b = authorAge[0].age
-    let c = authorAge[1].author_name
-    let d = authorAge[1].age
-    console.log(authorAge)
+    let findRating = await BookModel.find({author_id:{$in:[authorAge[0].author_id, authorAge[1].author_id]}, ratings:{$gt:4} }).select({name:1,author_id:1,ratings:1,_id:0})
+    let a = []
+    let b = []
+    for(let i =0; i<authorAge.length; i++){
+        let c = authorAge[i].author_name
+        let d = authorAge[i].age
+        a.push(c)
+        b.push(d)
+    }
     console.log(findRating)
-    res.send({msg:{"AuthorName1":a,"ageOfAuthor1":b,"AuthorName2":c,"ageOfAuthor2":d}}) 
+    res.send({msg:{"AuthorName":a,"ageOfAuthor":b}}) 
 }
 module.exports.createNewBook = createNewBook
 module.exports.createAuthor = createAuthor
