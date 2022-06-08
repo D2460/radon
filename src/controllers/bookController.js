@@ -1,3 +1,4 @@
+const { rmSync } = require("fs")
 const BookModel= require("../models/bookModel")
 
 const createBook= async function (req, res) {
@@ -24,10 +25,21 @@ const getParticularBooks = async function (req, res) {
 }
 
 const getXINRBooks = async function (req, res) {
-    let price = req.body.price
-    let allBooks = await BookModel.find({"price[indianPrice]":{$in:["Rs. 100","Rs. 200","Rs. 500"]}})
-    res.send({msg:allBooks})
+    let book1 =await BookModel.find({"prices.indianPrice":{$in:["rs 100","rs 200","rs 500"]} })
+    res.send({msg: book1})
 }
+
+// const getXINRBooks= async function (req, res){
+//     let allXINRBooks =await BookModel.find({$or:[{"prices.indianPrice":{$eq:"rs 100"}},
+//     {"prices.indianPrice":{$eq:"rs 200"}},
+//     {"prices.indianPrice":{$eq:"rs 500"}}]})
+//     console.log(allXINRBooks)
+//     res.send({msg: allXINRBooks})
+// }
+
+
+
+
 
 const getRandomBooks = async function (req, res) {
     let allBooks = await BookModel.find({$or:[{stockAvailable:true},{totalPage:{$gt:"500"}}]})
