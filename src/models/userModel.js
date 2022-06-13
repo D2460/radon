@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema( {
     userName: String,
     balance:{
-        type:Number
+        type:Number,
+        default:100
     },
     address:String,
     age: Number,
