@@ -22,7 +22,7 @@ const loginUser = async function (req, res) {
     {
       userId: user._id.toString(),
       batch: "radon",
-      organisation: "FUnctionUp",
+      organisation: "FunctionUp",
     },
     "functionup-radon"
   );
