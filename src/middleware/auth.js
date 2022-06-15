@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const mid1 = function(req, req, next) {
   let token = req.headers["x-auth-token"]
+  
   if (!token) return res.send({status:false, msg:"token must be require."})
 
   if(token){
