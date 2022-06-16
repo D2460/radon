@@ -79,7 +79,7 @@ const postMessage = async function (req, res) {
         if (!user) return res.status(404).send({ status: false, msg: 'No such user exists' })
         let updatedPosts = user.posts
         updatedPosts.push(message)
-        let updatedUser = await userModel.findOneAndUpdate({ _id: user._id }, { posts: updatedPosts }, { new: true })
+        let updatedUser = await userModel.findOneAndUpdate({ _id: user._id }, {$set:{posts: updatedPosts }}, { new: true })
         return res.status(201).send({ status: true, data: updatedUser })
     } catch (error) {
         console.log("This is the error :", error.message)
