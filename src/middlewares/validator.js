@@ -12,7 +12,7 @@ const validateHeader= function ( req, res, next) {
 
     //let appTypeFree = Boolean(appType)//This works on truthy/falsy
     if(appType == 'true') {
-        req.appTypeFree = true
+        req.appTypeFree = true  // set attributes name(appTypeFree) in request body.
     } else {
         req.appTypeFree = false
     }
