@@ -1,38 +1,41 @@
-const OrderModel = require("../models/orderModel")
-const ProductModel = require("../models/productModel")
-const UserModel = require("../models/userModel")
+const orderModel = require("../models/orderModel")
+const productModel = require("../models/productModel")
+const userModel = require("../models/userModel")
 
-const createOrder= async function (req, res) {
-    let data= req.body
-    let userId = data.user_id
-    let productId = data.product_id
-    let header = req.headers["isfreeappuser"]
-    let Price = await ProductModel.find({productId})
-    let userValidation  = await UserModel.exists({userId})
-    let productValidation = await ProductModel.exists({productId})
-    if(userValidation){
-        if(productValidation){
-            let purchase = await OrderModel.create(data)
-            if(header == false){
-                let balanceUpdate = await UserModel.findOneAndUpdate({_id : userId},{$set:{balance:`${balance}-${Price}`}},{new:true}).select({balance:1,_id:0})
-                let AmountUpdate = await OrderModel.findOneAndUpdate({_id:"62a77c4ceff3db5e786a6320"},{$set:{amount:balanceUpdate,isFreeAppUser:false}},{new:true}).select({amount:1,isFreeAppUser:1,_id:0})
-                if(AmountUpdate.amount>=0){
-                    res.send({success : purchase,"isFreeAppUser":AmountUpdate.isFreeAppUser,"Amount":AmountUpdate.amount})
-                }
-                else{
-                    res.send("Balance is not Sufficient for this using the App.")
-                }
-               
-            }
-            else if(header == true){
-                let AmountUpdate = await OrderModel.findOneAndUpdate({_id:"62a77d0c5b8e16bc5f35dd69"},{$set:{amount:0, isFreeAppUser:true}},{new:true}).select({amount:1,_id:0})
-                res.send({success:purchase,"Amount":AmountUpdate.amount})
-            }
-            res.send({success : purchase})
-        } else{
-            res.send({err: "the product is not present"})}
-    }else{
-        res.send({alert: "you are not a registered user, please register"})}
+const createOrder = async function(req, res) {
+    let orderDetails = req.body
+    let userId = orderDetails.userId
+
+    let user = await userModel.findById(userId)
+    if(!user) {
+        return res.send({status: false, message: "user doesnt exist"})
+    }
+
+    let productId = orderDetails.productId
+    let product = await productModel.findById(productId)
+    if(!product) {
+        return res.send({status: false, message: "product doesnt exist"})
+    }
+    
+    //Scenario 1 : Paid app and user balance is greater than or equal to product price
+    if(!req.appTypeFree && user.balance >= product.price) {
+        user.balance = user.balance - product.price
+        await user.save()
+
+        orderDetails.amount = product.price
+        orderDetails.isFreeAppUser = false
+        let orderCreated = await orderModel.create(orderDetails)
+        return res.send({status: true, data :orderCreated})
+    } else if(!req.appTypeFree) {
+    //Scenario 2 : Paid app and user balance is less than product price
+        return res.send({status: false, message:"User deosnt have sufficient balance"})
+    } else {
+    //Scenario 3 : Free app
+        orderDetails.amount = 0
+        orderDetails.isFreeAppUser = true
+        let orderCreated = await orderModel.create(orderDetails)
+        res.send({status: true, data: orderCreated})
+    }
 }
 
-module.exports.createOrder = createOrder
+module.exports.createOrder= createOrder

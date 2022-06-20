@@ -14,16 +14,14 @@ mongoose.connect("mongodb+srv://Dipen1234:jVP8pyAv3s3NzEM3@cluster0.dkmbl.mongod
 .then( () => console.log("MongoDb is connected"))
 .catch ( err => console.log(err) )
 
-
+// app.use(function(req, res, next) {
+//     console.log('This is a global middleware')
+//     //Adding a property in request object
+//     req['current-day'] = 'Wednesday'
+//     next()
+// })
 
 app.use('/', route);
-
-// app.use (
-//     function (req, res, next) {
-//         console.log ("inside GLOBAL MW");
-//         res.send({msg:"done"})
-//   }
-//   );
 
 
 app.listen(process.env.PORT || 3000, function () {

@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const UserController= require("../controllers/userController")
-const OrderController= require("../controllers/orderController")
-const ProductController = require("../controllers/productController")
-const commonMW = require ("../middlewares/commonMiddlewares")
 
-router.post("/createProduct", ProductController.createProduct)
+const userController= require("../controllers/userController")
+const productController = require("../controllers/productController")
+const orderController = require("../controllers/orderController")
+const validatorMiddleware = require("../middlewares/validator")
 
-router.post("/createUserNew",commonMW.mid1, UserController.createUser)
-
-router.post("/createOrder", commonMW.mid1, OrderController.createOrder)
+router.post("/products", productController.createProduct)
+router.post("/users", validatorMiddleware.validateHeader, userController.createUser)
+router.post("/orders", validatorMiddleware.validateHeader, orderController.createOrder)
 
 module.exports = router;
