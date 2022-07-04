@@ -64,16 +64,14 @@ const updateBookSchema = async function (req, res) {
 const updateBooksPrice = async function (req, res) {
     let authorId = req.body.author_id
     let bookName = req.body.book_name
-    let findBooksDetails = await bookModel.find({authorId}).populate("author_id")
-    for (let i = 0; i< findBooksDetails.length; i++) {
-        let authorRatings = findBooksDetails[i].author_id.author_ratings
-        let bookPrice = findBooksDetails[i].price
+    let findBooksDetails = await bookModel.findOne({$and:[{bookName},{authorId}]}).populate("author_id")
+        let authorRatings = findBooksDetails.author_id.author_ratings
+        let bookPrice = findBooksDetails.price
         if(authorRatings > 3.5){
-            let updateBookPrice = await bookModel.findOneAndUpdate({bookName},{price:(bookPrice+10)},{new:true})
+            let updateBookPrice = await bookModel.findOneAndUpdate({bookName},{$set:{price:(bookPrice+10)}},{new:true})
             return res.send({status:true, newData:updateBookPrice})
         }
         res.send({msg:"No author present in more than 3.5 ratings"})
-    }
     
 }
 
