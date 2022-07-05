@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post("/functionup/colleges",CollegeController.createCollege)
 
-router.post("/functionup/intern",InternController.createInterns)
+router.post("/functionup/interns",InternController.createInterns)
 
 router.get("/functionup/collegeDetails",CollegeController.getAllCollegessWithInterns)
 

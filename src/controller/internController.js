@@ -13,6 +13,7 @@ const isValid = function (value) {
 
 const createInterns = async function (req, res) {
     try {
+        res.setHeader("Access-Control-Allow-Origin","*")
         let data = req.body;
 
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "Body must be present." })
@@ -45,7 +46,7 @@ const createInterns = async function (req, res) {
 
         if (uniqueMobile) return res.status(400).send({ status: false, message: "mobile number already exists." })
 
-        if (typeof (data.mobile) === "string") return res.status(400).send({ status: false, message: "mobile number should be in numbers only." })
+        // if (typeof (data.mobile) === "string") return res.status(400).send({ status: false, message: "mobile number should be in numbers only." })
 
         if (!collegeName) return res.status(400).send({ status: false, message: "college Name must be present" })
 

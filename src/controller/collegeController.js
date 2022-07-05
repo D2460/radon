@@ -38,6 +38,8 @@ const createCollege = async function (req, res) {
 
         const createCollegeData = await CollegeModel.create(data)
 
+        res.setHeader("Access-Control-Allow-Origin","*")
+
         res.status(201).send({ status: true, newData: createCollegeData })
 
     } catch (err) {
@@ -69,7 +71,7 @@ const getAllCollegessWithInterns = async function (req, res) {
 
         const getInterns = await InternModel.find({ collegeId: collegeId, isDeleted: false }).select({ name: 1, email: 1, mobile: 1 })
 
-
+        res.setHeader("Access-Control-Allow-Origin","*")
         if (getInterns.length != 0) {
             filterCollege.interns = getInterns
             res.status(200).send({ status: true, data: filterCollege })
