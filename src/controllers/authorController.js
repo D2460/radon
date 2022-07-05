@@ -6,7 +6,7 @@ function isNum(val) {
 }
 
 
-// Creating author request handler =
+// Creating author request handler:-
 
 
 const createAuthor = async function (req, res) {
