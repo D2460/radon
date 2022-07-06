@@ -43,7 +43,7 @@ const authorize = async function (req, res, next) {
       let auth = authId.authorId
       //console.log("this is" ,auth) */
       if (auth != authorLoggedIn) {
-        return res.status(401).send({ status: false, msg: "Author logged is not allowed to modify the requested  data" })
+        return res.status(403).send({ status: false, msg: "Author logged is not allowed to modify the requested  data" })
       };
 
 
@@ -62,7 +62,7 @@ const authorize = async function (req, res, next) {
       }
       //console.log("this is" ,auth)
       if (auth != authorLoggedIn)
-        return res.status(401).send({
+        return res.status(403).send({
           status: false,
           msg: "Author logged is not allowed to modify the requested  data"
         });

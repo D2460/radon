@@ -49,10 +49,10 @@ const getBlogs = async function (req, res) {
     }
     if (filterResult.authorId || filterResult.category || filterResult.tags || filterResult.subcategory) {
 
-      //filterResult, {isDeleted: false}, {isPublished: true}).populate("authorId"
+      if (!mongoose.isValidObjectId(filterResult.authorId)) return res.status(400).send({ msg: "Invalid author Id" })
 
       let data = await blogModel.find({ $and: [filterResult, { isDeleted: false }, { isPublished: true }] });
-        
+
       if (data.length == 0) {
         return res.status(404).send({ status: false, msg: "Data not found" });
       }
@@ -70,27 +70,29 @@ const getBlogs = async function (req, res) {
 const updateBlog = async function (req, res) {
   try {
     let blogId = req.params.blogId;
+    if (!blogId)
+      res.status(400).send({ status: false, msg: "Please include an blogId" });
     let data = req.body;
     if (Object.keys(data).length == 0) return res.status(404).send({ status: false, msg: "Please include some properties to be updated" });
     let blog = await blogModel.findOne({ _id: blogId })
     if (Object.keys(blog).length == 0) {
       return res.status(404).send({ status: false, error: "No such blog found" });
     }
-    
+
     let arr1 = data.tags
     for (let i = 0; i < arr1.length; i++) {
       blog.tags.push(arr1[i])
-      
+
     }
     let arr = data.subcategory
     for (let i = 0; i < arr.length; i++) {
       blog.subcategory.push(arr[i])
-      
+
     }
-    
+
     blog.isPublished = (data.isPublished || true)
     blog.publishedAt = Date.now();
-    let updateData = await blogModel.findOneAndUpdate({ _id: blogId }, {isPublished:data.isPublished}, {new: true});
+    let updateData = await blogModel.findOneAndUpdate({ _id: blogId }, { isPublished: data.isPublished }, { new: true });
     return res.status(200).send({ status: true, Data: updateData });
 
 
@@ -155,10 +157,10 @@ const deleteBlogByQuery = async function (req, res) {
       let newData = await blogModel.findOne({ $and: [data, { isDeleted: false }, { isPublished: false }] });
 
       if (newData == null) return res.status(404).send({ status: false, msg: 'Data already deleted' });
-      
+
       if (newData.isDeleted == false) {
-        const deletedData = await blogModel.findByIdAndUpdate(newData._id, {$set: {isDeleted: true,deletedAt: Date.now()}},
-        { new: true }
+        const deletedData = await blogModel.findByIdAndUpdate(newData._id, { $set: { isDeleted: true, deletedAt: Date.now() } },
+          { new: true }
         ).select({ isDeleted: 1, deletedAt: 1, _id: 0 })
         return res.status(200).send({ status: true, msg: deletedData });
       }
