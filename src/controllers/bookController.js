@@ -14,24 +14,24 @@ const createBook = async function (req, res) {
             if (pubId) {
                 if (mongoose.isValidObjectId(pubId)) {
                     let author = await authorModel.findById(authId)
-                    if (Object.keys(author).length!=0) {
+                    if (Object.keys(author).length != 0) {
                         let publisher = await publisherModel.findById(pubId)
-                        if (Object.keys(publisher).length!=0) {
+                        if (Object.keys(publisher).length != 0) {
                             let allBooks = await bookModel.create(book)
-                            res.send({ status: true, msg: allBooks })
+                            return res.send({ status: true, msg: allBooks })
                         }
-                        res.send({ status: true, msg: "Publisher is not Present." })
+                        return res.send({ status: true, msg: "Publisher is not Present." })
                     }
-                    res.send({ status: true, msg: "Author is not Present " })
+                    return res.send({ status: true, msg: "Author is not Present " })
                 }
-                res.send({ status: false, msg: "Publisher Id is Invaild." })
+                return res.send({ status: false, msg: "Publisher Id is Invaild." })
             }
-            res.send({ status: false, msg: "Publisher Id is required." })
+            return res.send({ status: false, msg: "Publisher Id is required." })
         }
 
-        res.send({ status: false, msg: "Author Id is Invalid" })
+        return res.send({ status: false, msg: "Author Id is Invalid" })
     }
-    res.send({ status: false, msg: "Author Id is required" })
+    return res.send({ status: false, msg: "Author Id is required" })
 }
 
 const getBooksData = async function (req, res) {
@@ -53,9 +53,9 @@ const getBooksAuthorDetailsAndPubD = async function (req, res) {
 const updateBookSchema = async function (req, res) {
     let data = req.body
     let pubId = data.publisher_id
-    if(pubId == "62a1d2bb04fd23ca6a38286e" || pubId =="62a2b14bfcf8aa7cc656b1e3"){
-        let updateAllBooks = await bookModel.findOneAndUpdate({pubId}, { $set: { isHardCover: true } }, { new: true })
-        res.send({status:true, newData:updateAllBooks})
+    if (pubId == "62a1d2bb04fd23ca6a38286e" || pubId == "62a2b14bfcf8aa7cc656b1e3") {
+        let updateAllBooks = await bookModel.findOneAndUpdate({ pubId }, { $set: { isHardCover: true } }, { new: true })
+        res.send({ status: true, newData: updateAllBooks })
     }
 }
 
@@ -64,15 +64,16 @@ const updateBookSchema = async function (req, res) {
 const updateBooksPrice = async function (req, res) {
     let authorId = req.body.author_id
     let bookName = req.body.book_name
-    let findBooksDetails = await bookModel.findOne({$and:[{bookName},{authorId}]}).populate("author_id")
-        let authorRatings = findBooksDetails.author_id.author_ratings
-        let bookPrice = findBooksDetails.price
-        if(authorRatings > 3.5){
-            let updateBookPrice = await bookModel.findOneAndUpdate({bookName},{$set:{price:(bookPrice+10)}},{new:true})
-            return res.send({status:true, newData:updateBookPrice})
-        }
-        res.send({msg:"No author present in more than 3.5 ratings"})
-    
+    let findBooksDetails = await bookModel.findOne({ book_name: bookName, author_id: authorId }).populate("author_id")
+    let authorRatings = findBooksDetails.author_id.author_ratings
+    let bookPrice = findBooksDetails.price
+    if (authorRatings <= "3.5") {
+        return res.send({ msg: "No author present in more than 3.5 ratings" })
+    }
+    let updateBookPrice = await bookModel.findOneAndUpdate({book_name:bookName}, { price: (bookPrice + 10) }, { new: true })
+    return res.send({ status: true, newData: updateBookPrice })
+
+
 }
 
 module.exports.createBook = createBook
